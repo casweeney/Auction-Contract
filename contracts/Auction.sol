@@ -22,12 +22,17 @@ contract Auction {
 
     mapping(address=> Bid) bidder;
 
-    constructor(address _NFTaddress, string memory _NFTname, uint256 _NFTId, uint _leastAmount){
+    constructor(address _NFTaddress, string memory _NFTname, uint256 _NFTId){
         NFTaddress = IERC721(_NFTaddress);
         require(msg.sender == NFTaddress.ownerOf(_NFTId), "You are not an owner of these NFT");
         seller = msg.sender;
         NFTname = _NFTname;
         NFTId = _NFTId;
+    }
+
+    modifier onlyOwner {
+        require(msg.sender == seller, "You are not a seller");
+        _;
     }
 
     function StartAuction(uint256 _minBid) public onlyOwner {

@@ -54,7 +54,6 @@ contract Auction {
         }
         else{
             require(started, "Auction have not started or ended");
-            require(msg.sender != address(0), "can't send to zero address"); // sanity check
             require(msg.value > highestBid, "There's an higher bid");
 
             Bid storage bid = bidder[msg.sender];
@@ -71,7 +70,6 @@ contract Auction {
     function endAuction() internal {
         require(!ended, "The Auction has ended");
         require(NFTaddress.ownerOf(NFTId) == address(this), "The NFT has been trabsferred to the highest bidder");
-        require(msg.sender != address(0), "you can't send to zero address");
         
         NFTaddress.safeTransferFrom(address(this), highestBidder, NFTId);
         uint256 winnerValue = bidder[highestBidder].amount;
